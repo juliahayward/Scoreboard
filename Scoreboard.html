@@ -1,0 +1,138 @@
+<html>
+<head>
+  <script language="javascript" src="http://www.juliahayward.com/script/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript">
+$(function() {
+
+	var saved = localStorage.getItem("leftName");
+	if (saved != null) $("#leftName").text(saved);
+	saved = localStorage.getItem("rightName");
+	if (saved != null) $("#rightName").text(saved);
+	saved = localStorage.getItem("title");
+	if (saved != null) $("#title").text(saved);
+	saved = localStorage.getItem("length");
+	if (saved != null) $("#length").text(saved);
+
+	var keyMode = "";
+	var maxScore = parseInt($("#length").text());
+	var crawfordHappened = false;
+	var whiteOnLeft = true;
+
+	$("#leftScore").click(function() {
+		var oldScore = parseInt($(this).text());
+		if (oldScore + 2 == maxScore && !crawfordHappened) {
+			$("#leftCraw").show(); 
+			crawfordHappened = true; 
+		}
+		else $("#leftCraw").hide();
+		$("#rightCraw").hide();
+		$(this).text(Math.min(oldScore + 1, maxScore));
+	});
+	$("#rightScore").click(function() {
+		var oldScore = parseInt($(this).text());
+		if (oldScore + 2 == maxScore && !crawfordHappened) {
+			$("#rightCraw").show(); 
+			crawfordHappened = true;		
+		}
+		else $("#rightCraw").hide();
+		$("#leftCraw").hide();
+		$(this).text(Math.min(oldScore + 1, maxScore));
+	});
+	$("#leftName").click(function() {
+		keyMode = "leftName";
+		$("#leftName").hide();
+		$("#leftNameBox").show().focus();
+	});
+	$("#rightName").click(function() {
+		keyMode = "rightName";
+		$("#rightName").hide();
+		$("#rightNameBox").show().focus();
+	});
+	$("#length").click(function() {
+		keyMode = "length";
+		$("#length").hide();
+		$("#lengthBox").show().focus();
+	});
+	$("#title").click(function() {
+		keyMode = "title";
+		$("#title").hide();
+		$("#titleBox").show().focus();
+	});
+	$("#colourFlip").click(function() {
+		if (whiteOnLeft) {
+			$("#left").css("color", "white").css("background", "black");
+			$("#right").css("color", "black").css("background", "white"); 
+		}
+		else {
+			$("#right").css("color", "white").css("background", "black");
+			$("#left").css("color", "black").css("background", "white"); 
+		}
+		whiteOnLeft = !whiteOnLeft;
+	});
+	$("#reset").click(function() {
+		$("#rightCraw").hide();
+		$("#leftCraw").hide();
+		$("#rightScore").text("0");
+		$("#leftScore").text("0");
+	});
+	$("textarea").keydown(function(e) {
+		if (e.which == 13) {
+			if (keyMode == "leftName") {
+				var name = $("#leftNameBox").val();
+				$("#leftName").text(name);
+				localStorage.setItem("leftName", name);
+				$("#leftNameBox").hide();
+				$("#leftName").show();
+			}
+			else if (keyMode == "rightName") {
+				var name = $("#rightNameBox").val();
+				$("#rightName").text(name);
+				localStorage.setItem("rightName", name);
+				$("#rightNameBox").hide();
+				$("#rightName").show();
+			}
+			else if (keyMode == "title") {
+				var name = $("#titleBox").val();
+				$("#title").text(name);
+				localStorage.setItem("title", name);
+				$("#titleBox").hide();
+				$("#title").show();
+			}
+			else if (keyMode == "length") {
+				var name = $("#lengthBox").val();
+				$("#length").text(name);
+				localStorage.setItem("length", name);
+				$("#lengthBox").hide();
+				$("#length").show();
+				maxScore = parseInt($("#length").text());
+			}
+		 }
+	});
+
+});
+  </script>
+</head>
+<body style="font-family: Tahoma">
+  <div width="100%" style="background: #cccccc; text-align: center; z-index: 0 ">
+  	<div id="colourFlip" style="font-size: 16pt; margin: 8px; float: right;">&#x21c4</div>
+	<div id="reset" style="font-size: 16pt; margin: 8px; float: right;">&#x21bb</div>
+	<div id="title" style="font-size: 32pt; padding-top: 12px;">Cambridgeshire League Division 1</div>
+	<textarea id="titleBox" style="display: none;" ></textarea>
+	<div style="font-size: 24pt; padding-bottom: 12px;"><span id="length">11</span><textarea id="lengthBox" style="display: none;" ></textarea> point match</div>
+  </div>
+  <div width="100%">
+	<div id="left" style="width: 50%; height: 300px; float: left; background: white; color: black; text-align: center;">
+		<div id="leftName" style="font-size: 32pt; padding: 12px;">White</div>
+		<textarea id="leftNameBox" style="display: none;" ></textarea>
+		<div id="leftScore" style="font-size: 96pt; padding-top: 12px;">0</div>
+		<div id="leftCraw" style="font-size: 32pt; display: none;">Crawford</div>
+	</div>
+	<div id="right" style="width: 50%; height: 300px; float: right; background: black; color: white; text-align: center;">
+		<div id="rightName" style="font-size: 32pt; padding: 12px;">Black</div>
+		<textarea id="rightNameBox" style="display: none;" ></textarea>
+		<div id="rightScore" style="font-size: 96pt; padding-top: 12px;">0</div>
+		<div id="rightCraw" style="font-size: 32pt; display: none;">Crawford</div>
+	</div>
+  </div>
+</body>
+</html>
